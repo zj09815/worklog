@@ -92,4 +92,15 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/api/admin/user/{userid}")
+    @ApiOperation(value = "获取用户信息", notes = "输入userid")
+    public Result getUserInfo(@RequestParam Long userid){
+        if (!userService.idIsExist(userid)){
+            return ResultFactory.buildFailResult("用户不存在");
+        }
+
+        return ResultFactory.buildSuccessResult(userService.getUserInfo(userid));
+    }
+
 }

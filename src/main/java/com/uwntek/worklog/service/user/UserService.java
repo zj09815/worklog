@@ -2,6 +2,7 @@ package com.uwntek.worklog.service.user;
 
 import com.uwntek.worklog.dao.user.UserDAO;
 import com.uwntek.worklog.dto.UserDTO;
+import com.uwntek.worklog.dto.UserInfo;
 import com.uwntek.worklog.entity.user.User;
 import com.uwntek.worklog.util.ObjectMapperUtils;
 import lombok.extern.log4j.Log4j2;
@@ -85,4 +86,9 @@ public class UserService {
     public User get(Long id) {
         return userDAO.findById(id).orElse(null);
     }
+
+    public UserInfo getUserInfo(Long id){
+        return ObjectMapperUtils.map(userDAO.findById(id).orElse(new User()),UserInfo.class);
+    }
+
 }
