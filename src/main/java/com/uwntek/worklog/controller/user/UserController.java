@@ -54,8 +54,6 @@ public class UserController {
             return ResultFactory.buildFailResult("权限错误");
         } else if (!deptService.idIsExist(user.getDept_fk())) {
             return ResultFactory.buildFailResult("部门不存在");
-        } else if (userService.isExist(user.getUserName())) {
-            return ResultFactory.buildFailResult("用户名已存在");
         } else {
             try {
                 userService.addOrUpdateUser(user);
