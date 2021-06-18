@@ -8,7 +8,7 @@ import java.util.List;
 public interface RolePermissionDAO extends JpaRepository<RolePermission, Integer> {
     List<RolePermission> findAllByRoleIdAndIsEffective(int roleId, int isEffective);
 
-    List<RolePermission> findAllByRoleIdAndIsEffective(List<Integer> roleIds, int isEffective);
+    List<RolePermission> findAllByRoleIdInAndIsEffective(List<Integer> roleIds, int isEffective);
 
     void deleteAllByRoleId(int roleId);
 }
