@@ -54,7 +54,7 @@ public class PermissionService {
         Long userId = user.getId();
         List<Integer> roleIds = roleService.listRolesByUser(userId)
                 .stream().map(Role::getId).collect(Collectors.toList());
-        List<Integer> permissionIds = rolePermissionDAO.findAllByRoleIdAndIsEffective(roleIds, 1)
+        List<Integer> permissionIds = rolePermissionDAO.findAllByRoleIdInAndIsEffective(roleIds, 1)
                 .stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
         List<Permission> permissions = permissionDAO.findAllById(permissionIds);
 
