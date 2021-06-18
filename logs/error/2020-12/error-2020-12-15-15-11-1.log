@@ -1,0 +1,1 @@
+2020-12-15 15:11:23.218 [restartedMain] ERROR org.springframework.boot.context.logging.LoggingApplicationListener - Cannot set level 'trace;' for 'com.uwntek.worklog.dao'
