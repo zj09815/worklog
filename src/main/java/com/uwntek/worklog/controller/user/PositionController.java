@@ -1,6 +1,8 @@
 package com.uwntek.worklog.controller.user;
 
 import com.uwntek.worklog.entity.user.Position;
+import com.uwntek.worklog.reult.Result;
+import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.user.PositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,15 +20,15 @@ public class PositionController {
 
     @GetMapping("/api/admin/positionList")
     @ApiOperation(notes = "显示有效职位", value = "positionList")
-    public List<Position> list() throws Exception {
-        return positionService.findAllByIsEffective(1);
+    public Result list() throws Exception {
+        return ResultFactory.buildSuccessResult(positionService.findAllByIsEffective(1));
     }
 
     @PostMapping("api/admin/addOrUpdatePosition")
     @ApiOperation(notes = "增加或更新职位", value = "addOrUpdatePosition")
-    public Position addOrUpdatePosition(@RequestBody Position position) throws Exception {
+    public Result addOrUpdatePosition(@RequestBody Position position) throws Exception {
         positionService.addOrUpdate(position);
-        return position;
+        return ResultFactory.buildSuccessResult(position);
     }
 /*
     @PostMapping("api/admin/deletePosition")
