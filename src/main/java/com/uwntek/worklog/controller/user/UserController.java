@@ -8,8 +8,11 @@ import com.uwntek.worklog.service.user.DeptService;
 import com.uwntek.worklog.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -41,10 +44,12 @@ public class UserController {
     }
 
     @PostMapping("/api/admin/addOrUpdateUser")
-    @ApiOperation(value = "增加或更新用户", notes = "id存在时更新，不存在时新增")
+    @ApiOperation(value = "更新用户", notes = "id存在时更新")
 
     public Result addOrUpdateUser(@RequestBody User user) {
-
+        if (!userService.idIsExist(user.getId())){
+            return ResultFactory.buildFailResult("用户不存在");
+        }
         if (!userService.positionIsExist(user.getPosition())) {
             return ResultFactory.buildFailResult("权限错误");
         } else if (!deptService.idIsExist(user.getDept_fk())) {
@@ -59,6 +64,24 @@ public class UserController {
                 return ResultFactory.buildFailResult("添加失败,请检查信息是否正确完整");
             }
         }
+    }
+
+    @GetMapping("/api/admin/setPassword")
+    @ApiOperation("修改密码")
+    public Result setPassword(@RequestParam Long userid, @RequestParam String password){
+        if (!userService.idIsExist(userid)){
+            return ResultFactory.buildFailResult("用户不存在");
+        }
+        User user = userService.get(userid);
+        String userName = user.getUserName();
+        userName = HtmlUtils.htmlEscape(userName);
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;
+        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+        user.setSalt(salt);
+        user.setPassword(encodedPassword);
+        userService.addOrUpdateUser(user);
+        return ResultFactory.buildSuccessResult("用户密码修改成功");
     }
 
     @GetMapping("/api/admin/getUserNameZhById")
