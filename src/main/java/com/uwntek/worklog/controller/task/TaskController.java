@@ -1,5 +1,6 @@
 package com.uwntek.worklog.controller.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.uwntek.worklog.entity.task.*;
 import com.uwntek.worklog.entity.user.User;
@@ -46,8 +47,11 @@ public class TaskController {
         private Long taskMainPerson;
         private int midTimes;
         private String taskContent;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private Date taskStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private Date taskEndTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private Date taskCheckTime;
         private List<Long> userAdd;
 
@@ -187,7 +191,7 @@ public class TaskController {
 
 
     @PostMapping("")
-    @ApiOperation("增加或编辑项目信息")
+    @ApiOperation("新建项目")
     public Result addOrUpdateTask(@RequestBody TaskIn taskIn) {
         if (taskIn.getTaskName() == null || taskIn.getTaskContent() == null || taskIn.getTaskStartTime() == null || taskIn.getTaskEndTime()==null) {
             return ResultFactory.buildFailResult("信息未填充完整，请检查");
@@ -228,23 +232,24 @@ public class TaskController {
 
             return ResultFactory.buildSuccessResult("新增成功，id为："+task.getId());
         }else {
-
-//            编辑项目信息，仅涉及项目信息的修改，其他内容的修改在对应的Controller中
-            if (taskService.existsById(taskIn.getId())){
-                deleteTaskUserPermission(taskService.getTaskById(taskIn.getId()).getId(), taskService.getTaskById(taskIn.getId()).getTaskMainPerson());
-
-                Task task = transTaskInToTask(taskIn);
-                taskService.addOrUpdate(task);
-                addTaskUserPermission(task.getId(), task.getTaskMainPerson());
-                TaskStart taskStart = taskStartService.getTaskStartByTaskId(taskIn.getId());
-                taskStart.setTaskName(taskIn.getTaskName());
-                taskStart.setTaskMainPerson(taskIn.getTaskMainPerson());
-                taskStart.setTaskMainPersonNameZh(userService.get(taskIn.getTaskMainPerson()).getUserNameZh());
-                return ResultFactory.buildSuccessResult("编辑"+task.getId()+"成功");
-            }else {
                 return ResultFactory.buildFailResult("id不正确，请检查");
             }
         }
+
+    @PostMapping("/edit")
+    @ApiOperation("编辑项目信息")
+    public Result editTask(@RequestBody Task task){
+        if (task.getId() == null){
+            return ResultFactory.buildFailResult("id不正确");
+        }
+        if (!taskService.existsById(task.getId())){
+            return ResultFactory.buildFailResult("项目不存在");
+        }
+        deleteTaskUserPermission(taskService.getTaskById(task.getId()).getId(), taskService.getTaskById(task.getId()).getTaskMainPerson());
+        task.setTaskMainPersonNameZh(userService.get(task.getTaskMainPerson()).getUserNameZh());
+        taskService.addOrUpdate(task);
+        addTaskUserPermission(task.getId(), task.getTaskMainPerson());
+        return ResultFactory.buildSuccessResult("编辑项目"+task.getId()+"成功");
     }
 
     @PostMapping("/delete")
@@ -265,7 +270,8 @@ public class TaskController {
     @ApiOperation("查看项目信息")
     public Result getOneTask(@PathVariable Long taskid){
         if (taskService.existsById(taskid)){
-            return ResultFactory.buildSuccessResult(taskService.getTaskInfoById(taskid));
+            TaskInfo taskInfoById = taskService.getTaskInfoById(taskid);
+            return ResultFactory.buildSuccessResult(taskInfoById);
         }else {
             return ResultFactory.buildFailResult("项目id不存在");
         }

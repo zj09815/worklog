@@ -31,7 +31,7 @@ public class ShiroLoginFilter implements Filter {
             throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-//        response.setHeader("Access-Control-Allow-Origin", "http://192.192.1.196:8080");
+//        response.setHeader("Access-Control-Allow-Origin", "http://172.16.3.196:8080");
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
         response.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,PUT");
         response.setHeader("Access-Control-Max-Age", "3600");

@@ -56,6 +56,8 @@ public class UserController {
             return ResultFactory.buildFailResult("部门不存在");
         } else {
             try {
+                user.setPassword(userService.get(user.getId()).getPassword());
+                user.setSalt(userService.get(user.getId()).getSalt());
                 userService.addOrUpdateUser(user);
                 return ResultFactory.buildSuccessResultWithoutData("用户新增或修改成功");
             } catch (Exception e) {
