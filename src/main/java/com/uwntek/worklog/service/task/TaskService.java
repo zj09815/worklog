@@ -43,7 +43,7 @@ public class TaskService {
     }
 
     public boolean existsById(Long id){
-        return taskDAO.existsById(id);
+        return taskDAO.existsByIdAndIsEffective(id,1);
     }
 
     public TaskInfo getTaskInfoById(Long id){

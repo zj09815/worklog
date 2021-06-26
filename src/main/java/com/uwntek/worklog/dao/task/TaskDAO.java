@@ -12,4 +12,6 @@ public interface TaskDAO extends JpaRepository<Task,Long> {
     Page<Task> findAllByTaskMainPersonAndIsEffective(Long personId, int isEffective, Pageable pageable);
     Page<Task> findAllByTaskDeptAndIsEffective(int deptId, int isEffective, Pageable pageable);
     Task getTaskByIdAndIsEffective(Long id, int isEffective);
+
+    boolean existsByIdAndIsEffective(Long id,int isEffective);
 }

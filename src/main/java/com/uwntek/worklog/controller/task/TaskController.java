@@ -298,7 +298,7 @@ public class TaskController {
         Task task = taskService.getTaskById(taskProcess.getId());
         task.setProcessId(taskProcess.getProcessId());
         taskService.addOrUpdate(task);
-        return ResultFactory.buildSuccessResult("修改项目："+taskProcess.getProcessId()+" 成功");
+        return ResultFactory.buildSuccessResult("修改项目："+taskProcess.getId()+" 成功");
     }
 
 
