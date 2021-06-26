@@ -2,6 +2,8 @@ package com.uwntek.worklog.controller.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.uwntek.worklog.entity.task.Task;
 import com.uwntek.worklog.entity.task.TaskMid;
 import com.uwntek.worklog.reult.Result;
@@ -9,6 +11,8 @@ import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.user.UserService;
 import com.uwntek.worklog.service.task.TaskMidService;
 import com.uwntek.worklog.service.task.TaskService;
+import com.uwntek.worklog.util.LongJsonDeserializer;
+import com.uwntek.worklog.util.LongJsonSerializer;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +36,8 @@ public class TaskMidController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskMidInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
         private Date taskMidTime;
@@ -43,6 +49,8 @@ public class TaskMidController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskMidApprovalInfo {
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private Long taskMidApprovalPerson;
         @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
@@ -53,6 +61,8 @@ public class TaskMidController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskMidStatus{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private String taskMidStatus;
     }

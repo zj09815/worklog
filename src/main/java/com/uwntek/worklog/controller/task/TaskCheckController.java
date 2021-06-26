@@ -2,12 +2,16 @@ package com.uwntek.worklog.controller.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.uwntek.worklog.entity.task.TaskCheck;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.user.UserService;
 import com.uwntek.worklog.service.task.TaskCheckService;
 import com.uwntek.worklog.service.task.TaskService;
+import com.uwntek.worklog.util.LongJsonDeserializer;
+import com.uwntek.worklog.util.LongJsonSerializer;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +35,8 @@ public class TaskCheckController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskCheckInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         private Date taskCheckTime;
@@ -42,6 +48,8 @@ public class TaskCheckController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskCheckExamineInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private String taskCheckExamineSummary;
         private String taskCheckExamineConclusion;
@@ -54,6 +62,8 @@ public class TaskCheckController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskCheckApprovalInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private Long taskCheckApprovalPerson;
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)

@@ -3,12 +3,16 @@ package com.uwntek.worklog.controller.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.uwntek.worklog.entity.task.TaskStart;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.user.UserService;
 import com.uwntek.worklog.service.task.TaskService;
 import com.uwntek.worklog.service.task.TaskStartService;
+import com.uwntek.worklog.util.LongJsonDeserializer;
+import com.uwntek.worklog.util.LongJsonSerializer;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +34,8 @@ public class TaskStartController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskStartInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private String taskContent;
     }
@@ -38,6 +44,8 @@ public class TaskStartController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskStartExamineInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private Long examinePerson;
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
@@ -49,6 +57,8 @@ public class TaskStartController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskStartApprovalInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private Long approvalPerson;
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
@@ -60,6 +70,8 @@ public class TaskStartController {
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskStartRatifyInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private Long ratifyPerson;
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
@@ -93,7 +105,7 @@ public class TaskStartController {
         if (!taskStartService.existsById(taskStartInfo.getId())){
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
-        if (!taskService.getTaskById(taskStartInfo.getId()).getProcessId().equals("start")){
+        if (!taskService.getTaskById(taskStartService.getTaskStartById(taskStartInfo.getId()).getTaskId()).getProcessId().equals("start")){
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskStart taskStartById = taskStartService.getTaskStartById(taskStartInfo.getId());
