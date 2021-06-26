@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TaskStartDAO extends JpaRepository<TaskStart, Long> {
     boolean existsByTaskIdAndIsEffective(Long taskId, int isEffective);
     TaskStart getTaskStartByTaskIdAndIsEffective(Long taskId, int isEffective);
+    boolean existsByIdAndIsEffective(Long id, int isEffective);
 }

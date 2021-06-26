@@ -19,7 +19,7 @@ public class TaskCheckService {
     }
 
     public boolean existsById(Long id){
-        return taskCheckDAO.existsById(id);
+        return taskCheckDAO.existsByIdAndIsEffective(id,1);
     }
 
 

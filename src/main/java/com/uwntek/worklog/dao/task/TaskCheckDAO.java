@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TaskCheckDAO extends JpaRepository<TaskCheck,Long> {
     TaskCheck getTaskCheckByTaskIdAndIsEffective(Long taskId,int isEffective);
+    boolean existsByIdAndIsEffective(Long id, int isEffective);
 }

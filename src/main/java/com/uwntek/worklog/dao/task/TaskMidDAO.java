@@ -8,5 +8,6 @@ import java.util.List;
 public interface TaskMidDAO extends JpaRepository<TaskMid, Long> {
     List<TaskMid> getTaskMidByTaskIdAndIsEffective(Long taskId, int isEffective);
     TaskMid getTaskMidByTaskIdAndTaskMidIdAndIsEffective(Long taskId, int taskMidId, int isEffective);
+    boolean existsByIdAndIsEffective(Long id, int isEffective);
 
 }

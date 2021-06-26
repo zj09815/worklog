@@ -21,7 +21,7 @@ public class TaskMidService {
     }
 
     public boolean existsById(Long id){
-        return taskMidDAO.existsById(id);
+        return taskMidDAO.existsByIdAndIsEffective(id,1);
     }
 
     public void  deleteTaskMidById(Long id){
