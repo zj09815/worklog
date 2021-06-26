@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,12 +33,12 @@ public class TaskService {
 
 
     public Page<Task> getAllTask(int pagenum){
-        Pageable pageable = PageRequest.of(pagenum,20);
+        Pageable pageable = PageRequest.of(pagenum,20, Sort.by("taskMainPerson","taskName"));
         return taskDAO.findAllByIsEffective(1,pageable);
     }
 
     public Page<Task> getAllTaskByUser(Long userid, int pagenum){
-        Pageable pageable = PageRequest.of(pagenum,20);
+        Pageable pageable = PageRequest.of(pagenum,20,Sort.by("taskName"));
         return taskDAO.findAllByTaskMainPersonAndIsEffective(userid,1,pageable);
     }
 
@@ -72,7 +73,7 @@ public class TaskService {
     }
 
     public Page<Task> getAllTaskByDept(int deptid, int pagenum){
-        Pageable pageable = PageRequest.of(pagenum,20);
+        Pageable pageable = PageRequest.of(pagenum,20, Sort.by("taskMainPerson","taskName"));
         return taskDAO.findAllByTaskDeptAndIsEffective(deptid,1,pageable);
     }
 

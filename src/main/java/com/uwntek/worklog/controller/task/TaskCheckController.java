@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/admin/task/check")
@@ -58,6 +59,7 @@ public class TaskCheckController {
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         private Date taskCheckApprovalTime;
         private String taskCheckApprovalComment;
+
     }
 
 
