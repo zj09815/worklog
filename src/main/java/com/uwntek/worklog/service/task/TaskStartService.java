@@ -23,7 +23,7 @@ public class TaskStartService {
     }
 
     public boolean existsById(Long id){
-        return taskStartDAO.existsById(id);
+        return taskStartDAO.existsByIdAndIsEffective(id,1);
     }
 
     public void  deleteTaskStartByTaskId(Long taskId){
