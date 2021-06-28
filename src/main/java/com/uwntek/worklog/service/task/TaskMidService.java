@@ -3,6 +3,7 @@ package com.uwntek.worklog.service.task;
 import com.uwntek.worklog.dao.task.TaskMidDAO;
 import com.uwntek.worklog.entity.task.TaskMid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class TaskMidService {
     }
 
     public void deleteTaskMidsByTaskId(Long taskId){
-        List<TaskMid> taskMids = taskMidDAO.getTaskMidByTaskIdAndIsEffective(taskId,1);
+        List<TaskMid> taskMids = taskMidDAO.getTaskMidByTaskIdAndIsEffective(taskId,1, Sort.by("taskMidId"));
         for(TaskMid taskMid:taskMids){
             taskMid.setIsEffective(0);
             addOrUpdate(taskMid);
@@ -41,7 +42,7 @@ public class TaskMidService {
     }
 
     public List<TaskMid> getTaskMidByTaskId(Long taskId){
-        return taskMidDAO.getTaskMidByTaskIdAndIsEffective(taskId,1);
+        return taskMidDAO.getTaskMidByTaskIdAndIsEffective(taskId,1, Sort.by("taskMidId"));
     }
 
     public TaskMid getTaskMidByTaskIdAndMidId(Long taskId, int taskMidId){
