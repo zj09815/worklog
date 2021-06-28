@@ -146,8 +146,7 @@ public class TaskStartController {
         if (!taskStartService.existsById(taskStartApprovalInfo.getId())){
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
-        if (!taskService.getTaskById(taskService.getTaskById(
-                taskStartApprovalInfo.getId()).getId()).getProcessId().equals("start_approval")){
+        if (!taskService.getTaskById(taskStartService.getTaskStartById(taskStartApprovalInfo.getId()).getTaskId()).getProcessId().equals("start_examine")){
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskStart taskStartById = taskStartService.getTaskStartById(taskStartApprovalInfo.getId());
@@ -167,8 +166,7 @@ public class TaskStartController {
         if (!taskStartService.existsById(taskStartRatifyInfo.getId())){
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
-        if (!taskService.getTaskById(taskService.getTaskById(
-                taskStartRatifyInfo.getId()).getId()).getProcessId().equals("start_ratify")){
+        if (!taskService.getTaskById(taskStartService.getTaskStartById(taskStartRatifyInfo.getId()).getTaskId()).getProcessId().equals("start_examine")){
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskStart taskStartById = taskStartService.getTaskStartById(taskStartRatifyInfo.getId());
