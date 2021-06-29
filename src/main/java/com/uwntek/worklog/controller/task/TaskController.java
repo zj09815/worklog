@@ -88,6 +88,11 @@ public class TaskController {
         task.setMidTimes(taskIn.getMidTimes());
         task.setProcessId("start");
         task.setIsEffective(1);
+        Date taskStartTime = taskIn.getTaskStartTime();
+        Date taskEndTime = taskIn.getTaskEndTime();
+        task.setTaskStartTime(taskStartTime);
+        task.setTaskEndTime(taskEndTime);
+        task.setTaskPeriod((int)(Math.abs(taskEndTime.getTime()-taskStartTime.getTime())/86400000));
         return task;
     }
 
@@ -97,13 +102,8 @@ public class TaskController {
         TaskStart taskStart = new TaskStart();
         taskStart.setId(UUID.randomUUID().getMostSignificantBits()& Long.MAX_VALUE);
         taskStart.setIsEffective(1);
-        Date taskStartTime = taskIn.getTaskStartTime();
-        Date taskEndTime = taskIn.getTaskEndTime();
         taskStart.setTaskId(task.getId());
-        taskStart.setTaskStartTime(taskStartTime);
-        taskStart.setTaskEndTime(taskEndTime);
         taskStart.setTaskName(taskIn.getTaskName());
-        taskStart.setTaskPeriod((int)(Math.abs(taskEndTime.getTime()-taskStartTime.getTime())/86400000));
         taskStart.setTaskContent(taskIn.getTaskContent());
         taskStart.setTaskMainPerson(task.getTaskMainPerson());
         taskStart.setTaskMainPersonNameZh(task.getTaskMainPersonNameZh());

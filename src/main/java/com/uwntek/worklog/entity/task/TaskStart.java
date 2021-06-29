@@ -35,9 +35,6 @@ public class TaskStart {
     private String taskMainPersonNameZh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date taskStartTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date taskEndTime;
-    private int taskPeriod;
     private Long examinePerson;
     private String examinePersonNameZh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")

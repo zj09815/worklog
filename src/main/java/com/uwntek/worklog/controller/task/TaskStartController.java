@@ -38,6 +38,8 @@ public class TaskStartController {
         @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private String taskContent;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
+        private Date taskStartTime;
     }
 
     @Getter
@@ -110,6 +112,7 @@ public class TaskStartController {
         }
         TaskStart taskStartById = taskStartService.getTaskStartById(taskStartInfo.getId());
         taskStartById.setTaskContent(taskStartInfo.getTaskContent());
+        taskStartById.setTaskStartTime(taskStartInfo.getTaskStartTime());
         taskStartService.addOrUpdate(taskStartById);
         return ResultFactory.buildSuccessResult("编辑:"+taskStartInfo.getId()+" 成功");
     }
