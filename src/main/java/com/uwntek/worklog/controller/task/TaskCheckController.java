@@ -56,6 +56,7 @@ public class TaskCheckController {
         private String taskCheckExamineVerify;
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         private Date taskCheckExamineTime;
+        private Long taskCheckExaminePerson;
     }
 
     @Getter
@@ -91,7 +92,7 @@ public class TaskCheckController {
     }
 
     @PostMapping("/content")
-    @ApiOperation("填写项目验收信息")
+    @ApiOperation("填写项目验收信息,状态为check_start可编辑")
     public Result setTaskCheckInfo(@RequestBody TaskCheckInfo taskCheckInfo){
         if (taskCheckInfo.getId()== null){
             return ResultFactory.buildFailResult("id不能为空，请重试");
@@ -114,7 +115,7 @@ public class TaskCheckController {
     }
 
     @PostMapping("/examine")
-    @ApiOperation("验收人员填写信息")
+    @ApiOperation("验收人员填写信息，状态为check_examine可编辑")
     public Result setTaskCheckExamineInfo(@RequestBody TaskCheckExamineInfo taskCheckExamineInfo){
         if (taskCheckExamineInfo.getId() == null){
             return ResultFactory.buildSuccessResult("id不能为空，请重试");
@@ -130,6 +131,8 @@ public class TaskCheckController {
         taskCheck.setTaskCheckExamineConclusion(taskCheckExamineInfo.getTaskCheckExamineConclusion());
         taskCheck.setTaskCheckExamineVerify(taskCheckExamineInfo.getTaskCheckExamineVerify());
         taskCheck.setTaskCheckExamineTime(taskCheckExamineInfo.getTaskCheckExamineTime());
+        taskCheck.setTaskCheckExaminePerson(taskCheckExamineInfo.getTaskCheckExaminePerson());
+        taskCheck.setTaskCheckExaminePersonNameZh(userService.get(taskCheckExamineInfo.getTaskCheckExaminePerson()).getUserNameZh());
         taskCheckService.addOrUpdate(taskCheck);
         return ResultFactory.buildSuccessResult("编辑："+taskCheckExamineInfo.getId()+" 成功");
     }
@@ -137,7 +140,7 @@ public class TaskCheckController {
 
 
     @PostMapping("/approval")
-    @ApiOperation("验收成功检查信息")
+    @ApiOperation("验收成功检查信息，状态为check_approval可编辑")
     public Result setTaskCheckApprovalInfo(@RequestBody TaskCheckApprovalInfo taskCheckApprovalInfo){
         if (taskCheckApprovalInfo.getId()== null){
             return ResultFactory.buildFailResult("id不能为空，请重试");

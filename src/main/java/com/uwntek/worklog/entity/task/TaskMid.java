@@ -37,6 +37,8 @@ public class TaskMid {
     private String taskMidExamineVerify;
     private String taskMidExamineSummary;
     private String taskMidExamineConclusion;
+    private Long taskMidExaminePerson;
+    private String taskMidExaminePersonNameZh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date taskMidExamineTime;
     private Long taskMidApprovalPerson;

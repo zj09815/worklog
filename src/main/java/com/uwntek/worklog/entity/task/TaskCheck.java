@@ -36,6 +36,8 @@ public class TaskCheck {
     private String taskCheckExamineVerify;
     private String taskCheckExamineSummary;
     private String taskCheckExamineConclusion;
+    private Long taskCheckExaminePerson;
+    private String taskCheckExaminePersonNameZh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date taskCheckExamineTime;
     private Long taskCheckApprovalPerson;

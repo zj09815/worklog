@@ -48,6 +48,21 @@ public class TaskMidController {
     @Getter
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
+    private static class TaskMidExamineInfo{
+        @JsonDeserialize(using = LongJsonDeserializer.class)
+        @JsonSerialize(using = LongJsonSerializer.class)
+        private Long id;
+        private String taskMidExamineSummary;
+        private String taskMidExamineConclusion;
+        private String taskMidExamineVerify;
+        @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+        private Date taskMidExamineTime;
+        private Long taskMidExaminePerson;
+    }
+
+    @Getter
+    @Setter
+    @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
     private static class TaskMidApprovalInfo {
         @JsonDeserialize(using = LongJsonDeserializer.class)
         @JsonSerialize(using = LongJsonSerializer.class)
@@ -108,6 +123,33 @@ public class TaskMidController {
         taskMid.setTaskMidConclusion(taskMidInfo.getTaskMidConclusion());
         taskMidService.addOrUpdate(taskMid);
         return ResultFactory.buildSuccessResult("编辑：" + taskMidInfo.getId() + " 成功");
+    }
+
+    @PostMapping("/examine")
+    @ApiOperation("根据id填写核准信息")
+    public Result setTaskMidExamineInfoById(@RequestBody TaskMidExamineInfo taskMidExamineInfo){
+        if (taskMidExamineInfo.getId() == null){
+            return ResultFactory.buildFailResult("禁止新增");
+        }
+        if (!taskMidService.existsById(taskMidExamineInfo.getId())){
+            return ResultFactory.buildFailResult("id不正确，请检查");
+        }
+        if (!(taskService.getTaskById(taskMidService.getTaskMidById(taskMidExamineInfo.getId())
+                .getTaskId())
+                .getProcessId()
+                .equals("mid_"+taskMidService.getTaskMidById(taskMidExamineInfo.getId()).getTaskMidId())
+                && taskMidService.getTaskMidById(taskMidExamineInfo.getId()).getTaskMidStatus().equals("examine")))
+        {
+            return ResultFactory.buildFailResult("当前状态不可编辑");
+        }
+        TaskMid taskMid = taskMidService.getTaskMidById(taskMidExamineInfo.getId());
+        taskMid.setTaskMidExamineTime(taskMidExamineInfo.getTaskMidExamineTime());
+        taskMid.setTaskMidExaminePerson(taskMidExamineInfo.getTaskMidExaminePerson());
+        taskMid.setTaskMidExaminePersonNameZh(userService.get(taskMidExamineInfo.getTaskMidExaminePerson()).getUserNameZh());
+        taskMid.setTaskMidExamineVerify(taskMidExamineInfo.getTaskMidExamineVerify());
+        taskMidService.addOrUpdate(taskMid);
+        return ResultFactory.buildSuccessResult("编辑："+taskMidExamineInfo.getId()+" 成功");
+
     }
 
     @PostMapping("/approval")

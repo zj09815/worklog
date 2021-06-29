@@ -201,7 +201,7 @@ public class TaskController {
     @PostMapping("")
     @ApiOperation("新建项目")
     public Result addOrUpdateTask(@RequestBody TaskIn taskIn) {
-        if (taskIn.getTaskName() == null || taskIn.getTaskContent() == null || taskIn.getTaskStartTime() == null || taskIn.getTaskEndTime()==null) {
+        if (taskIn.getTaskName() == null || taskIn.getTaskStartTime() == null || taskIn.getTaskEndTime()==null) {
             return ResultFactory.buildFailResult("信息未填充完整，请检查");
         }
         if (taskIn.getTaskEndTime().getTime() < taskIn.getTaskStartTime().getTime()){
