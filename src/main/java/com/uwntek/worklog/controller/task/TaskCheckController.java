@@ -100,7 +100,7 @@ public class TaskCheckController {
         if (!taskCheckService.existsById(taskCheckInfo.getId())){
             return ResultFactory.buildFailResult("id不存在，请重试");
         }
-        if (taskService.getTaskById(taskCheckService.
+        if (!taskService.getTaskById(taskCheckService.
                 getTaskCheckById(taskCheckInfo.getId())
                 .getTaskId())
                 .getProcessId().equals("check_start")){
@@ -148,7 +148,7 @@ public class TaskCheckController {
         if (!taskCheckService.existsById(taskCheckApprovalInfo.getId())){
             return ResultFactory.buildFailResult("id不存在，请重试");
         }
-        if (taskService.getTaskById(taskCheckService.
+        if (!taskService.getTaskById(taskCheckService.
                 getTaskCheckById(taskCheckApprovalInfo.getId())
                 .getTaskId())
                 .getProcessId().equals("check_approval")){

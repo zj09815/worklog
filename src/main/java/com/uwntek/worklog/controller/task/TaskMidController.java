@@ -143,6 +143,8 @@ public class TaskMidController {
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskMid taskMid = taskMidService.getTaskMidById(taskMidExamineInfo.getId());
+        taskMid.setTaskMidExamineConclusion(taskMidExamineInfo.getTaskMidExamineConclusion());
+        taskMid.setTaskMidExamineSummary(taskMidExamineInfo.getTaskMidExamineSummary());
         taskMid.setTaskMidExamineTime(taskMidExamineInfo.getTaskMidExamineTime());
         taskMid.setTaskMidExaminePerson(taskMidExamineInfo.getTaskMidExaminePerson());
         taskMid.setTaskMidExaminePersonNameZh(userService.get(taskMidExamineInfo.getTaskMidExaminePerson()).getUserNameZh());
