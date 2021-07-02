@@ -88,7 +88,7 @@ public class TaskMidController {
     @ApiOperation("根据id获取中期信息")
     public Result getTaskMidById(@PathVariable Long id){
         if (taskMidService.existsById(id)){
-            return ResultFactory.buildSuccessResult(taskMidService.getTaskMidById(id));
+            return ResultFactory.buildSuccessResult(taskMidService.getTaskMidDTOById(id));
         }else {
             return ResultFactory.buildFailResult("id不正确，请检查");
         }

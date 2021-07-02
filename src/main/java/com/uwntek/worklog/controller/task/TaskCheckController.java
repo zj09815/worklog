@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.uwntek.worklog.dto.task.TaskCheckDTO;
 import com.uwntek.worklog.entity.task.TaskCheck;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
@@ -70,8 +71,8 @@ public class TaskCheckController {
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         private Date taskCheckApprovalTime;
         private String taskCheckApprovalComment;
-
     }
+
 
 
 
@@ -81,7 +82,7 @@ public class TaskCheckController {
         if (!taskCheckService.existsById(id)){
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
-        return ResultFactory.buildSuccessResult(taskCheckService.getTaskCheckById(id));
+        return ResultFactory.buildSuccessResult(taskCheckService.getTaskCheckDTOById(id));
     }
 
 

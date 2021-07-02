@@ -32,20 +32,18 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setLoginUrl("/nowhere");
 
 
+//权限开关处
 
-/*
-
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+/*        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         Map<String, Filter> customizedFilter = new HashMap<>(); // 自定义过滤器设置 1
         customizedFilter.put("url", getURLPathMatchingFilter()); // 自定义过滤器设置 2，命名，需在设置过滤路径前
         filterChainDefinitionMap.put("/api/authentication", "authc");// 防鸡贼登录
         filterChainDefinitionMap.put("/api/admin/**", "authc");
         filterChainDefinitionMap.put("/api/admin/**", "url"); // 自定义过滤器设置 3，设置过滤路径
         shiroFilterFactoryBean.setFilters(customizedFilter); // 自定义过滤器设置 4，启用
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-*/
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);*/
 
-
+//权限开关结束处
 
         return shiroFilterFactoryBean;
     }
