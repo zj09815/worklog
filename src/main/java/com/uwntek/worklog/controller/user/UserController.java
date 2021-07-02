@@ -94,7 +94,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/api/admin/existsByUserName")
+    @GetMapping("/api/existsByUserName")
     @ApiOperation(value = "用于新增用户时判断用户是否存在")
     public Result existsByUserName(String userName) {
         return ResultFactory.buildSuccessResult(userService.isExist(userName));

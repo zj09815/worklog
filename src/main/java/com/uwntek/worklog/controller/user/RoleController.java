@@ -4,11 +4,15 @@ import com.uwntek.worklog.entity.user.Role;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.user.PermissionService;
+import com.uwntek.worklog.service.user.RoleMenuService;
 import com.uwntek.worklog.service.user.RolePermissionService;
 import com.uwntek.worklog.service.user.RoleService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController(value = "用户权限")
 @RequestMapping
@@ -19,6 +23,8 @@ public class RoleController {
     PermissionService permissionService;
     @Autowired
     RolePermissionService rolePermissionService;
+    @Autowired
+    RoleMenuService roleMenuService;
 
     @GetMapping("/api/admin/role")
     @ApiOperation("获取所有角色列表")
@@ -52,6 +58,13 @@ public class RoleController {
     @ApiOperation("权限列表")
     public Result listPerms() {
         return ResultFactory.buildSuccessResult(permissionService.list());
+    }
+
+    @PutMapping("/api/admin/role/menu")
+    @ApiOperation("修改角色与菜单关联")
+    public Result updateRoleMenu(@RequestParam int roleid, @RequestBody Map<String, List<Integer>> menusIds){
+        roleMenuService.updateRoleMenu(roleid,menusIds);
+        return ResultFactory.buildSuccessResult("修改成功");
     }
 
 
