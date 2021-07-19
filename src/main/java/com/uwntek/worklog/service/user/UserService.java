@@ -75,7 +75,7 @@ public class UserService {
         return userDAO.findByUserName(userName);
     }
 
-    public User getByUserNameAndPassword(String userName, String password) {
+    public User getByUserName(String userName, String password) {
         return userDAO.findByUserNameAndPassword(userName, password);
     }
 

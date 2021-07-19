@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.uwntek.worklog.entity.task.*;
-import com.uwntek.worklog.entity.user.User;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.task.*;
@@ -300,7 +299,4 @@ public class TaskController {
         taskService.addOrUpdate(task);
         return ResultFactory.buildSuccessResult("修改项目："+taskProcess.getId()+" 成功");
     }
-
-
-
 }
