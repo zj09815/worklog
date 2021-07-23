@@ -4,6 +4,7 @@ import com.uwntek.worklog.entity.user.User;
 import com.uwntek.worklog.entity.user.UserNameOnly;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
+import com.uwntek.worklog.service.user.PositionService;
 import com.uwntek.worklog.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,23 +27,6 @@ public class LoginController {
     @PostMapping("/api/login")
     @ApiOperation(notes = "用户登录", value = "用户登录")
     @ResponseBody
-    /*
-     * public Result login(@RequestBody User requestUser){ String userName =
-     * requestUser.getUserName(); Subject subject = SecurityUtils.getSubject();
-     * UsernamePasswordToken usernamePasswordToken = new
-     * UsernamePasswordToken(userName,requestUser.getPassword());
-     * usernamePasswordToken.setRememberMe(true); try {
-     * subject.login(usernamePasswordToken); User user =
-     * userService.findByUserName(userName); Long userId =user.getId(); int
-     * userDept= user.getDept(); String userNameZh = user.getUserNameZh();
-     * UserNameOnly outUser = new UserNameOnly(); outUser.setId(userId);
-     * outUser.setUserName(userName); outUser.setDept(userDept);
-     * outUser.setUserNameZh(userNameZh); return
-     * ResultFactory.buildSuccessResult(outUser); } catch
-     * (IncorrectCredentialsException e) { return
-     * ResultFactory.buildFailResult("密码错误"); } catch (UnknownAccountException e) {
-     * return ResultFactory.buildFailResult("账号不存在"); } }
-     */
     public Result login(@RequestParam("username") String username, @RequestParam("password") String password) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
@@ -68,6 +52,7 @@ public class LoginController {
             outUser.setUserName(username);
             outUser.setDept(userDept);
             outUser.setUserNameZh(userNameZh);
+            outUser.setPosition(userService.get(userId).getPosition());
             return ResultFactory.buildSuccessResult(outUser);
         } else {
             token.clear();

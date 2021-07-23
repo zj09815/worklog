@@ -156,8 +156,9 @@ public class TaskController {
     @GetMapping("/all")
     @ApiOperation("获取所有项目列表")
     public Result getAllTask(@RequestParam int pagenum){
-        return ResultFactory.buildSuccessResult(taskService.getAllTask(pagenum));
+        return ResultFactory.buildSuccessResult(taskService.getTasksByCurrentUser(pagenum));
     }
+
 
     @GetMapping("/u/{userid}")
     @ApiOperation("根据用户id获取项目列表")
@@ -179,6 +180,8 @@ public class TaskController {
             return ResultFactory.buildFailResult("用户不存在");
         }
     }
+
+
 
 
 

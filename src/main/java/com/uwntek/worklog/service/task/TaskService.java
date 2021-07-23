@@ -8,6 +8,8 @@ import com.uwntek.worklog.entity.task.Task;
 import com.uwntek.worklog.entity.task.TaskInfo;
 import com.uwntek.worklog.entity.task.TaskUserPermission;
 import com.uwntek.worklog.entity.user.User;
+import com.uwntek.worklog.entity.user.UserRole;
+import com.uwntek.worklog.service.user.UserRoleService;
 import com.uwntek.worklog.service.user.UserService;
 import com.uwntek.worklog.util.LongJsonDeserializer;
 import com.uwntek.worklog.util.LongJsonSerializer;
@@ -41,6 +43,8 @@ public class TaskService {
     TaskDAO taskDAO;
     @Autowired
     TaskUserPermissionDAO taskUserPermissionDAO;
+    @Autowired
+    UserRoleService userRoleService;
 
 
 
@@ -59,6 +63,9 @@ public class TaskService {
     }
 
     public TaskInfo getTaskInfoById(Long id){
+        if (taskDAO.getTaskByIdAndIsEffective(id,1) == null){
+            return null;
+        }
         Task task = taskDAO.getTaskByIdAndIsEffective(id,1);
         TaskInfo taskInfo = new TaskInfo();
         taskInfo.setId(task.getId());
@@ -102,35 +109,36 @@ public class TaskService {
 
     }
 
-    public List<Task> getTasksByCurrentUser(int pagenum) {
-
+    public Page<Task> getTasksByCurrentUser(int pagenum) {
+        Pageable pageable = PageRequest.of(pagenum,20, Sort.by("taskMainPerson","taskName"));
         String username = SecurityUtils.getSubject().getPrincipal().toString();
-        Long userId = userService.findByUserName(username).getId();
-        List<Long> taskIds = taskUserPermissionDAO.getTaskIdByUserId(userId);
-        return taskDAO.findAllByIdIn(taskIds);
-    }
-
-/*
-
-public Page<Task> getTasksByCurrentUser(int pagenum){
-        String username = SecurityUtils.getSubject().getPrincipal().toString();
-        Long userId = userService.getByUserName(username).getId();
-        Pageable pageable = PageRequest.of(pagenum, 20, Sort.by(Sort.Direction.DESC, "taskStartTime"));
-        Page<Task> tasks = taskDAO.findAll(new Specification<Task>(){
-            @Override
-            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<>();
-//                确保有效
-                predicates.add(criteriaBuilder.equal(root.get("isEffective").as(Integer.class),1));
-//                当前登录用户为创建用户
-                predicates.add(criteriaBuilder.equal(root.get("taskMainPerson").as(Long.class),userId));
-//                当前登录用户为
+        User user = userService.findByUserName(username);
+        Long userId = user.getId();
+        int roleId = 3;
+        List<UserRole> userRoles = userRoleService.listAllByUserId(userId);
+        for (UserRole userRole: userRoles){
+            if (userRole.getRoleId() == 1){
+                roleId = 1;
+                break;
+            }else if (userRole.getRoleId() == 2){
+                roleId = 2;
+                break;
             }
-        },pageable);
+        }
+        switch (roleId){
+            case 3:
+                List<Long> taskIds = taskUserPermissionDAO.getTaskIdByUserId(userId);
+                return taskDAO.findAllByIdInAndIsEffective(taskIds,1,pageable);
+            case 2:
+                return taskDAO.findAllByTaskDeptAndIsEffective(user.getDept(),1,pageable);
+            case 1:
+                return taskDAO.findAllByIsEffective(1,pageable);
+            default:
+                return taskDAO.findAllByTaskMainPersonAndIsEffective(userId,1,pageable);
+        }
 
     }
 
- */
 
 
 

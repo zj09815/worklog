@@ -27,4 +27,9 @@ public class TaskUserPermission {
     public  TaskUserPermission(){
         setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
     }
+    public TaskUserPermission(Long taskId, Long userId){
+        setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+        setTaskId(taskId);
+        setUserId(userId);
+    }
 }

@@ -32,4 +32,8 @@ public class UserRoleService {
         userRoleDAO.saveAll(userRoles);
     }
 
+    public List<UserRole> listAll(){
+        return userRoleDAO.findAllByIsEffective(1);
+    }
+
 }

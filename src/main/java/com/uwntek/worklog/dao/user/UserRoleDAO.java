@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserRoleDAO extends JpaRepository<UserRole, Integer> {
     List<UserRole> findAllByUserIdAndIsEffective(Long userId, int isEffective);
+    List<UserRole> findAllByIsEffective(int isEffective);
 
     void deleteAllByUserId(Long userId);
 }
