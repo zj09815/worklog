@@ -38,6 +38,7 @@ public class ShiroLoginFilter implements Filter {
         response.setHeader("Access-Control-Allow-Headers",
                 "Origin,X-Requested-With,Content-Type,Accept,Authorization,token");
         response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Set-Cookie","JSESSIONID=xxx;SameSite=None;Secure");
         if (request.getMethod().equals("OPTIONS")) {
             response.setStatus(200);
             return;

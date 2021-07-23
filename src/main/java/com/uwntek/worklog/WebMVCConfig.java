@@ -11,4 +11,5 @@ public class WebMVCConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/api/admin/file/**").addResourceLocations("file:" + "E:\\files\\");
     }
+
 }

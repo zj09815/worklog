@@ -15,6 +15,7 @@ public interface TaskUserPermissionDAO extends JpaRepository<TaskUserPermission,
     Long deleteByTaskIdAndUserId(Long taskId, Long userId);
     TaskUserPermission getTaskUserPermissionByTaskIdAndUserId(Long taskId, Long userId);
     List<TaskUserPermission> findAllByTaskId(Long taskId);
+
     @Query("select t.taskId from TaskUserPermission t where t.userId = :userId")
     List<Long> getTaskIdByUserId(@Param("userId") Long userId);
 }
