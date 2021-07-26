@@ -4,11 +4,13 @@ import com.uwntek.worklog.entity.user.Dept;
 import com.uwntek.worklog.reult.Result;
 import com.uwntek.worklog.reult.ResultFactory;
 import com.uwntek.worklog.service.user.DeptService;
+import com.uwntek.worklog.service.user.UserRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,6 +19,8 @@ import java.util.List;
 public class DeptController {
     @Autowired
     DeptService deptService;
+    @Autowired
+    UserRoleService userRoleService;
 
     @GetMapping("/api/admin/getDeptNameById")
     @ApiOperation("通过id获取部门名称")
@@ -33,6 +37,25 @@ public class DeptController {
     @ApiOperation(notes = "显示有效组", value = "显示有效组")
     public Result list() throws Exception {
         List<Dept> deptList = deptService.findAllByIsEffective(1);
+        return ResultFactory.buildSuccessResult(deptList);
+    }
+
+    @GetMapping("/api/admin/deptList/v2")
+    @ApiOperation(notes = "根据登录用户动态显示有效组", value = "根据登录用户动态显示有效组")
+    public Result listByCurrentUser() throws Exception {
+        int roleId = userRoleService.getRoleId();
+        List<Dept> deptList = new ArrayList<>();
+        if (roleId == 1){
+            deptList = deptService.findAllByIsEffective(1);
+        }else {
+            Dept dept = deptService.get(userRoleService.getDept());
+            List<Dept> deptTree = new ArrayList<>();
+            deptTree.add(dept);
+            Dept deptRoot = deptService.get(2);
+            deptRoot.setChildren(deptTree);
+            deptList.add(deptRoot);
+        }
+
         return ResultFactory.buildSuccessResult(deptList);
     }
 

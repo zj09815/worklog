@@ -5,6 +5,7 @@ import com.uwntek.worklog.entity.user.Dept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public class DeptService {
     @Autowired
     DeptDAO deptDAO;
+    @Autowired
+    UserRoleService userRoleService;
 
     public void handleDepts(List<Dept> depts) {
         for (Dept dept : depts) {
@@ -32,6 +35,7 @@ public class DeptService {
         handleDepts(deptList);
         return deptList;
     }
+
 
     public List<Dept> findAllByParentId(int parentId, int isEffective) {
         return deptDAO.findAllByParentIdAndIsEffective(parentId, isEffective);

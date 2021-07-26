@@ -13,4 +13,6 @@ public interface MonthlogDAO extends JpaRepository<Monthlog, Long> {
     List<Monthlog> findAllByIsEffectiveAndDeptAndCreateMonth(int isEffective, Dept dept, Date month, Sort sort);
 
     Monthlog getMonthlogByIsEffectiveAndUserAndCreateMonth(int isEffective, User user, Date month);
+
+    List<Monthlog> findMonthlogByUserAndIsEffective(User user, int isEffective);
 }

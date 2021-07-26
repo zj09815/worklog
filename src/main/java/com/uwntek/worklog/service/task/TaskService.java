@@ -1,34 +1,22 @@
 package com.uwntek.worklog.service.task;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.uwntek.worklog.dao.task.TaskDAO;
 import com.uwntek.worklog.dao.task.TaskUserPermissionDAO;
 import com.uwntek.worklog.entity.task.Task;
 import com.uwntek.worklog.entity.task.TaskInfo;
 import com.uwntek.worklog.entity.task.TaskUserPermission;
 import com.uwntek.worklog.entity.user.User;
-import com.uwntek.worklog.entity.user.UserRole;
 import com.uwntek.worklog.service.user.UserRoleService;
 import com.uwntek.worklog.service.user.UserService;
-import com.uwntek.worklog.util.LongJsonDeserializer;
-import com.uwntek.worklog.util.LongJsonSerializer;
-import lombok.Data;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -45,7 +33,6 @@ public class TaskService {
     TaskUserPermissionDAO taskUserPermissionDAO;
     @Autowired
     UserRoleService userRoleService;
-
 
 
     public Page<Task> getAllTask(int pagenum){
@@ -111,7 +98,10 @@ public class TaskService {
 
     public Page<Task> getTasksByCurrentUser(int pagenum) {
         Pageable pageable = PageRequest.of(pagenum,20, Sort.by("taskMainPerson","taskName"));
+        int roleId = userRoleService.getRoleId();
         String username = SecurityUtils.getSubject().getPrincipal().toString();
+        User user = userService.findByUserName(username);
+/*      String username = SecurityUtils.getSubject().getPrincipal().toString();
         User user = userService.findByUserName(username);
         Long userId = user.getId();
         int roleId = 3;
@@ -124,17 +114,17 @@ public class TaskService {
                 roleId = 2;
                 break;
             }
-        }
+        }*/
         switch (roleId){
             case 3:
-                List<Long> taskIds = taskUserPermissionDAO.getTaskIdByUserId(userId);
+                List<Long> taskIds = taskUserPermissionDAO.getTaskIdByUserId(user.getId());
                 return taskDAO.findAllByIdInAndIsEffective(taskIds,1,pageable);
             case 2:
                 return taskDAO.findAllByTaskDeptAndIsEffective(user.getDept(),1,pageable);
             case 1:
                 return taskDAO.findAllByIsEffective(1,pageable);
             default:
-                return taskDAO.findAllByTaskMainPersonAndIsEffective(userId,1,pageable);
+                return taskDAO.findAllByTaskMainPersonAndIsEffective(user.getId(),1,pageable);
         }
 
     }

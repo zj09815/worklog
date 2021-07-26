@@ -35,7 +35,7 @@ public class MonthlogController {
     @GetMapping("/api/admin/monthlog/dept/{deptid}")
     @ApiOperation(notes = "按部门查询月度总结", value = "按部门查询月度总结")
     public Result getByDept(@PathVariable("deptid") int deptid, Date month) throws Exception {
-        List<Monthlog> monthlogList = monthlogService.findByDept(deptid, month);
+        List<Monthlog> monthlogList = monthlogService.findByDept(deptid,month);
         return ResultFactory.buildSuccessResult(monthlogList);
     }
 
