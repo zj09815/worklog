@@ -247,9 +247,7 @@ public class TaskController {
         return ResultFactory.buildSuccessResult("编辑项目" + task.getId() + "成功");
     }
 
-    @PostMapping("/edit/users")
-    @ApiOperation("编辑项目参与人")
-    public Result editTaskUsers(@RequestBody)
+
 
     @PostMapping("/delete")
     @ApiOperation("删除项目")
