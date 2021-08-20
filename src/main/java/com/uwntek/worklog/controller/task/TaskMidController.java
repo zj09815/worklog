@@ -35,11 +35,11 @@ public class TaskMidController {
     @Getter
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
-    private static class TaskMidInfo{
+    private static class TaskMidInfo {
         @JsonDeserialize(using = LongJsonDeserializer.class)
         @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
-        @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
+        @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         private Date taskMidTime;
         private String taskMidContent;
         private String taskMidConclusion;
@@ -48,7 +48,7 @@ public class TaskMidController {
     @Getter
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
-    private static class TaskMidExamineInfo{
+    private static class TaskMidExamineInfo {
         @JsonDeserialize(using = LongJsonDeserializer.class)
         @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
@@ -68,14 +68,15 @@ public class TaskMidController {
         @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
         private Long taskMidApprovalPerson;
-        @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
+        @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         private Date taskMidApprovalTime;
         private String taskMidApprovalComment;
     }
+
     @Getter
     @Setter
     @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
-    private static class TaskMidStatus{
+    private static class TaskMidStatus {
         @JsonDeserialize(using = LongJsonDeserializer.class)
         @JsonSerialize(using = LongJsonSerializer.class)
         private Long id;
@@ -83,27 +84,26 @@ public class TaskMidController {
     }
 
 
-
     @GetMapping("/{id}")
     @ApiOperation("根据id获取中期信息")
-    public Result getTaskMidById(@PathVariable Long id){
-        if (taskMidService.existsById(id)){
+    public Result getTaskMidById(@PathVariable Long id) {
+        if (taskMidService.existsById(id)) {
             return ResultFactory.buildSuccessResult(taskMidService.getTaskMidDTOById(id));
-        }else {
+        } else {
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
     }
 
     @GetMapping("/t/{taskid}")
     @ApiOperation("根据项目id获取所有中期信息")
-    public Result getTaskMidsByTaskId(@PathVariable Long taskid){
+    public Result getTaskMidsByTaskId(@PathVariable Long taskid) {
         return ResultFactory.buildSuccessResult(taskMidService.getTaskMidByTaskId(taskid));
     }
 
     @PostMapping("/content")
-    @ApiOperation(value = "很据id填写中期信息",notes = "只有状态为mid_i,并且task_mid_status=start时才能编辑")
-    public Result setTaskMidInfoById(@RequestBody TaskMidInfo taskMidInfo){
-        if (taskMidInfo.getId() == null){
+    @ApiOperation(value = "很据id填写中期信息", notes = "只有状态为mid_i,并且task_mid_status=start时才能编辑")
+    public Result setTaskMidInfoById(@RequestBody TaskMidInfo taskMidInfo) {
+        if (taskMidInfo.getId() == null) {
             return ResultFactory.buildFailResult("禁止新增");
         }
         if (!taskMidService.existsById(taskMidInfo.getId())) {
@@ -112,9 +112,8 @@ public class TaskMidController {
         if (!(taskService.getTaskById(taskMidService.getTaskMidById(taskMidInfo.getId())
                 .getTaskId())
                 .getProcessId()
-                .equals("mid_"+taskMidService.getTaskMidById(taskMidInfo.getId()).getTaskMidId())
-                && taskMidService.getTaskMidById(taskMidInfo.getId()).getTaskMidStatus().equals("start")))
-        {
+                .equals("mid_" + taskMidService.getTaskMidById(taskMidInfo.getId()).getTaskMidId())
+                && taskMidService.getTaskMidById(taskMidInfo.getId()).getTaskMidStatus().equals("start"))) {
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskMid taskMid = taskMidService.getTaskMidById(taskMidInfo.getId());
@@ -127,19 +126,18 @@ public class TaskMidController {
 
     @PostMapping("/examine")
     @ApiOperation("根据id填写核准信息")
-    public Result setTaskMidExamineInfoById(@RequestBody TaskMidExamineInfo taskMidExamineInfo){
-        if (taskMidExamineInfo.getId() == null){
+    public Result setTaskMidExamineInfoById(@RequestBody TaskMidExamineInfo taskMidExamineInfo) {
+        if (taskMidExamineInfo.getId() == null) {
             return ResultFactory.buildFailResult("禁止新增");
         }
-        if (!taskMidService.existsById(taskMidExamineInfo.getId())){
+        if (!taskMidService.existsById(taskMidExamineInfo.getId())) {
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
         if (!(taskService.getTaskById(taskMidService.getTaskMidById(taskMidExamineInfo.getId())
                 .getTaskId())
                 .getProcessId()
-                .equals("mid_"+taskMidService.getTaskMidById(taskMidExamineInfo.getId()).getTaskMidId())
-                && taskMidService.getTaskMidById(taskMidExamineInfo.getId()).getTaskMidStatus().equals("examine")))
-        {
+                .equals("mid_" + taskMidService.getTaskMidById(taskMidExamineInfo.getId()).getTaskMidId())
+                && taskMidService.getTaskMidById(taskMidExamineInfo.getId()).getTaskMidStatus().equals("examine"))) {
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskMid taskMid = taskMidService.getTaskMidById(taskMidExamineInfo.getId());
@@ -150,25 +148,24 @@ public class TaskMidController {
         taskMid.setTaskMidExaminePersonNameZh(userService.get(taskMidExamineInfo.getTaskMidExaminePerson()).getUserNameZh());
         taskMid.setTaskMidExamineVerify(taskMidExamineInfo.getTaskMidExamineVerify());
         taskMidService.addOrUpdate(taskMid);
-        return ResultFactory.buildSuccessResult("编辑："+taskMidExamineInfo.getId()+" 成功");
+        return ResultFactory.buildSuccessResult("编辑：" + taskMidExamineInfo.getId() + " 成功");
 
     }
 
     @PostMapping("/approval")
     @ApiOperation("根据id填写核准信息")
-    public Result setTaskMidApprovalInfoById(@RequestBody TaskMidApprovalInfo taskMidApprovalInfo){
-        if (taskMidApprovalInfo.getId() == null){
+    public Result setTaskMidApprovalInfoById(@RequestBody TaskMidApprovalInfo taskMidApprovalInfo) {
+        if (taskMidApprovalInfo.getId() == null) {
             return ResultFactory.buildFailResult("禁止新增");
         }
-        if (!taskMidService.existsById(taskMidApprovalInfo.getId())){
+        if (!taskMidService.existsById(taskMidApprovalInfo.getId())) {
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
         if (!(taskService.getTaskById(taskMidService.getTaskMidById(taskMidApprovalInfo.getId())
                 .getTaskId())
                 .getProcessId()
-                .equals("mid_"+taskMidService.getTaskMidById(taskMidApprovalInfo.getId()).getTaskMidId())
-                && taskMidService.getTaskMidById(taskMidApprovalInfo.getId()).getTaskMidStatus().equals("approval")))
-        {
+                .equals("mid_" + taskMidService.getTaskMidById(taskMidApprovalInfo.getId()).getTaskMidId())
+                && taskMidService.getTaskMidById(taskMidApprovalInfo.getId()).getTaskMidStatus().equals("approval"))) {
             return ResultFactory.buildFailResult("当前状态不可编辑");
         }
         TaskMid taskMid = taskMidService.getTaskMidById(taskMidApprovalInfo.getId());
@@ -177,17 +174,17 @@ public class TaskMidController {
         taskMid.setTaskMidApprovalPersonNameZh(userService.get(taskMidApprovalInfo.getTaskMidApprovalPerson()).getUserNameZh());
         taskMid.setTaskMidApprovalComment(taskMidApprovalInfo.getTaskMidApprovalComment());
         taskMidService.addOrUpdate(taskMid);
-        return ResultFactory.buildSuccessResult("编辑："+taskMidApprovalInfo.getId()+" 成功");
+        return ResultFactory.buildSuccessResult("编辑：" + taskMidApprovalInfo.getId() + " 成功");
 
     }
 
     @PostMapping("/delete")
-    @ApiOperation(value = "删除一个中期验收",notes = "只能删除最后一个中期节点，依次删除")
-    public Result deleteTaskMid(@RequestParam Long id){
-        if (!taskMidService.existsById(id)){
+    @ApiOperation(value = "删除一个中期验收", notes = "只能删除最后一个中期节点，依次删除")
+    public Result deleteTaskMid(@RequestParam Long id) {
+        if (!taskMidService.existsById(id)) {
             return ResultFactory.buildFailResult("id不正确，请检查");
         }
-        if (!(taskMidService.getTaskMidById(id).getTaskMidId() == taskService.getTaskById(taskMidService.getTaskMidById(id).getTaskId()).getMidTimes()-1)){
+        if (!(taskMidService.getTaskMidById(id).getTaskMidId() == taskService.getTaskById(taskMidService.getTaskMidById(id).getTaskId()).getMidTimes() - 1)) {
             return ResultFactory.buildFailResult("请先删除最后的中期节点");
         }
         taskMidService.deleteTaskMidById(id);
@@ -198,10 +195,11 @@ public class TaskMidController {
         taskService.addOrUpdate(task);
         return ResultFactory.buildSuccessResult("删除成功");
     }
+
     @PostMapping("/add")
     @ApiOperation("新增一个中期验收")
-    public Result addTaskMid(@RequestParam Long taskid){
-        if (!taskService.existsById(taskid)){
+    public Result addTaskMid(@RequestParam Long taskid) {
+        if (!taskService.existsById(taskid)) {
             return ResultFactory.buildFailResult("项目id输入错误，请重试");
         }
         TaskMid taskMid = new TaskMid();
@@ -210,25 +208,24 @@ public class TaskMidController {
         taskMid.setIsEffective(1);
         taskMid.setTaskMidStatus("start");
         Task task = taskService.getTaskById(taskid);
-        task.setMidTimes(task.getMidTimes()+1);
+        task.setMidTimes(task.getMidTimes() + 1);
         taskService.addOrUpdate(task);
-        taskMid.setTaskMidId(task.getMidTimes()-1);
+        taskMid.setTaskMidId(task.getMidTimes() - 1);
         taskMidService.addOrUpdate(taskMid);
         return ResultFactory.buildSuccessResult("新增成功");
     }
 
     @PostMapping("/status")
     @ApiOperation("修改中期状态")
-    public Result setTaskMidStatus(@RequestBody TaskMidStatus taskMidStatus){
-        if (!taskMidService.existsById(taskMidStatus.getId())){
+    public Result setTaskMidStatus(@RequestBody TaskMidStatus taskMidStatus) {
+        if (!taskMidService.existsById(taskMidStatus.getId())) {
             return ResultFactory.buildFailResult("id输入错误，请重试");
         }
         TaskMid taskMid = taskMidService.getTaskMidById(taskMidStatus.getId());
         taskMid.setTaskMidStatus(taskMidStatus.getTaskMidStatus());
         taskMidService.addOrUpdate(taskMid);
-        return ResultFactory.buildSuccessResult("修改："+taskMidStatus.getId()+" 成功");
+        return ResultFactory.buildSuccessResult("修改：" + taskMidStatus.getId() + " 成功");
     }
-
 
 
 }
